@@ -2,12 +2,18 @@ package ipca.example.newsmob
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +27,22 @@ class MainActivity : AppCompatActivity() {
 
         listviewPost = findViewById(R.id.listviewNews)
         listviewPost.adapter = PostsAdapter()
+
+        GlobalScope.launch (Dispatchers.IO){
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url("https://newsapi.org/v2/top-headlines?country=pt&apiKey=1765f87e4ebc40229e80fd0f75b6416c")
+                .build()
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful){
+                    // apresentar mensagem de erro
+                }else {
+                    val result = response.body!!.string()
+                    Log.d("newsmob", result)
+                }
+            }
+        }
+
     }
 
     inner class PostsAdapter : BaseAdapter() {
