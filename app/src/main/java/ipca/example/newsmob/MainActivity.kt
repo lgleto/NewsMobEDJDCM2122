@@ -1,5 +1,6 @@
 package ipca.example.newsmob
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -103,11 +104,15 @@ class MainActivity : AppCompatActivity() {
                         imageView.setImageResource(R.drawable.ic_launcher_background)
                     }
                 }
-
-
-
             }
 
+            rootView.isClickable = true
+            rootView.setOnClickListener {
+                val intent = Intent(this@MainActivity, ArticleDetailActivity::class.java)
+                intent.putExtra(ArticleDetailActivity.ARTICLE_URL, article.url)
+                intent.putExtra(ArticleDetailActivity.ARTICLE_TITLE, article.title)
+                startActivity(intent)
+            }
 
             return rootView
         }
